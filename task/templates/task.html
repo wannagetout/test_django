@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Django test</title>
+</head>
+<body>
+    <form method="POST" action="create/">
+        {% csrf_token %}
+        <p>
+            <label>Введите описание задачи</label><br>
+            <input type="text" name="description" />
+        </p>
+        <p>
+            <label>Укажите статус</label><br>
+            <!-- В некоторой степени нелогично, так как если задача создается, то она по дефолту активна -->
+            <input type="checkbox" name="status" />
+        </p>
+        <input type="submit" value="Сохранить" >
+    </form>
+    {% if tasks.count > 0 %}
+    <h2>Список задач</h2>
+    <table>
+        <div>
+            <form method="GET">
+                <label>Фильтр по активным задачам</label>
+                <input type="checkbox" name="status-filter" />
+                <input type="submit" value="Фильтровать" >
+            </form>
+        </div>
+        <thead><th>Id</th><th>Описание</th><th>статус</th><th>Дата создания</th><th>Дата изменения</th><th></th></thead>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.id }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.create_date }}</td>
+            <td>{{ task.update_date }}</td>
+            <td><a href="edit/{{task.id}}">Изменить</a> | <a href="delete/{{task.id}}">Удалить</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>
